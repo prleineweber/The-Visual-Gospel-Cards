@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #f3eee6;
+  --color-bg-elevated: #fbf8f2;
+  --color-bg-subtle: #e7e0d4;
+  --color-fg: #221e1a;
+  --color-fg-muted: #6d665c;
+  --color-fg-subtle: #8d857a;
+  --color-accent: #2a2622;
+  --color-accent-fg: #f6f1e8;
+  --color-border: color-mix(in oklab, var(--color-fg) 14%, transparent);
+  --color-border-strong: color-mix(in oklab, var(--color-fg) 28%, transparent);
+  --color-ring: #2a2622;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --aspect-card: 1 / 1;
+  --spacing-card: 22rem;
+
+  --shadow-border: 0 0 0 1px rgba(34, 30, 26, 0.1);
+  --shadow-border-hover: 0 0 0 1px rgba(34, 30, 26, 0.18);
+
+  --ease-out-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100%;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    font-family: var(--font-display);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  img.card-art {
+    background: #fff;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.rise-in {
+  animation: rise-in 280ms var(--ease-out-smooth) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-in {
+    animation: none;
+  }
+}
+
+@media print {
+  body {
+    background: white;
+    color: #1a1714;
+  }
+}
