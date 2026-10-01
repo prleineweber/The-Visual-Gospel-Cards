@@ -5,7 +5,7 @@ import { a as ExternalLink, c as Check, i as Feather, l as BookOpen, n as Printe
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as create } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-Bv2RMZgP.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-BGpxdc3y.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -352,10 +352,13 @@ function FlashDeck() {
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 						variant: "outline",
-						className: "h-11 px-2 text-[11px] leading-tight sm:text-xs",
-						onClick: goPrev,
-						"aria-label": "Previous Word",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "size-4 shrink-0" }), "Previous Word"]
+						className: "h-11 whitespace-nowrap px-1.5 text-[10px] tracking-tight sm:px-2 sm:text-xs",
+						onClick: () => {
+							direction.current = -1;
+							prevDay();
+						},
+						"aria-label": "Previous Card",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "size-4 shrink-0" }), "Previous Card"]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 						variant: isKnown ? "primary" : "subtle",
@@ -365,10 +368,13 @@ function FlashDeck() {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 						variant: "outline",
-						className: "h-11 px-2 text-[11px] leading-tight sm:text-xs",
-						onClick: goNext,
-						"aria-label": "Next Word",
-						children: ["Next Word", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "size-4 shrink-0" })]
+						className: "h-11 whitespace-nowrap px-1.5 text-[10px] tracking-tight sm:px-2 sm:text-xs",
+						onClick: () => {
+							direction.current = 1;
+							nextDay();
+						},
+						"aria-label": "Next Card",
+						children: ["Next Card", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "size-4 shrink-0" })]
 					})
 				]
 			})

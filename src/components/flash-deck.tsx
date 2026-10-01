@@ -168,12 +168,15 @@ export function FlashDeck() {
       <div className="mt-3 mb-2 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
         <Button
           variant="outline"
-          className="h-11 px-2 text-[11px] leading-tight sm:text-xs"
-          onClick={goPrev}
-          aria-label="Previous Word"
+          className="h-11 whitespace-nowrap px-1.5 text-[10px] tracking-tight sm:px-2 sm:text-xs"
+          onClick={() => {
+            direction.current = -1;
+            prevDay();
+          }}
+          aria-label="Previous Card"
         >
           <ChevronLeft className="size-4 shrink-0" />
-          Previous Word
+          Previous Card
         </Button>
         <Button
           variant={isKnown ? "primary" : "subtle"}
@@ -185,11 +188,14 @@ export function FlashDeck() {
         </Button>
         <Button
           variant="outline"
-          className="h-11 px-2 text-[11px] leading-tight sm:text-xs"
-          onClick={goNext}
-          aria-label="Next Word"
+          className="h-11 whitespace-nowrap px-1.5 text-[10px] tracking-tight sm:px-2 sm:text-xs"
+          onClick={() => {
+            direction.current = 1;
+            nextDay();
+          }}
+          aria-label="Next Card"
         >
-          Next Word
+          Next Card
           <ChevronRight className="size-4 shrink-0" />
         </Button>
       </div>
