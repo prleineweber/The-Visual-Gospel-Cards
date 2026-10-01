@@ -1,7 +1,7 @@
-import { n as CARDS, t as BOOK } from "./gospel-DiKDTYRE.mjs";
+import { n as CARDS, t as BOOK } from "./gospel-Be_Ddc2Q.mjs";
 import { _ as Link, y as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as Printer, u as ArrowLeft } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/guide-tWZsiTp9.js
+//#region node_modules/.nitro/vite/services/ssr/assets/guide-Bvnh2_6A.js
 var import_jsx_runtime = require_jsx_runtime();
 function Guide() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -38,7 +38,7 @@ function Guide() {
 					children: [
 						"One image a day. See the word, sit with the key verse (",
 						"ESV",
-						"), then walk through the definition, gospel response, reflection questions, and prayer. Scripture quotations are from the ESV® Bible."
+						"), then walk through the definition, reflection questions, gospel response, and prayer. Scripture quotations are from the ESV® Bible."
 					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -75,13 +75,16 @@ function Guide() {
 								className: "leading-relaxed",
 								children: card.definition
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase",
-								children: "Gospel response"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "leading-relaxed",
-								children: card.gospelResponse
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "mt-3 leading-relaxed",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-medium",
+										children: "Memory Verse:"
+									}),
+									" ",
+									card.verse.ref
+								]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase",
@@ -90,6 +93,14 @@ function Guide() {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
 								className: "mt-1 list-decimal space-y-2 pl-5 leading-relaxed",
 								children: card.questions.map((question) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: question }, question))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase",
+								children: "Gospel response"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "leading-relaxed",
+								children: card.gospelResponse
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase",

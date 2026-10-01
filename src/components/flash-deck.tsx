@@ -24,6 +24,10 @@ export function FlashDeck() {
   const current = LAYERS[layer];
 
   useEffect(() => {
+    if (layer >= LAYERS.length) setLayer(0);
+  }, [layer, setLayer]);
+
+  useEffect(() => {
     function onKey(event: KeyboardEvent) {
       const tag = (event.target as HTMLElement | null)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "IFRAME") return;
@@ -244,6 +248,9 @@ function CardFace({
             Definition
           </p>
           <p className="mt-2 text-base leading-relaxed text-fg">{card.definition}</p>
+          <p className="mt-5 text-base leading-relaxed text-fg">
+            <span className="font-medium">Memory Verse:</span> {card.verse.ref}
+          </p>
         </>
       ) : null}
       {layerId === "verse" ? (
@@ -254,14 +261,17 @@ function CardFace({
         </div>
       ) : null}
       {layerId === "response" ? (
-        <p className="mt-2 text-base leading-relaxed text-fg">{card.gospelResponse}</p>
-      ) : null}
-      {layerId === "questions" ? (
-        <ol className="mt-3 list-decimal space-y-4 pl-5 text-base leading-relaxed text-fg">
-          {card.questions.map((question) => (
-            <li key={question}>{question}</li>
-          ))}
-        </ol>
+        <>
+          <ol className="mt-3 list-decimal space-y-4 pl-5 text-base leading-relaxed text-fg">
+            {card.questions.map((question) => (
+              <li key={question}>{question}</li>
+            ))}
+          </ol>
+          <p className="mt-6 text-xs font-medium tracking-[0.16em] text-fg-muted uppercase">
+            Gospel response
+          </p>
+          <p className="mt-2 text-base leading-relaxed text-fg">{card.gospelResponse}</p>
+        </>
       ) : null}
       {layerId === "prayer" ? (
         <p className="mt-2 whitespace-pre-line font-display text-base leading-relaxed text-fg">

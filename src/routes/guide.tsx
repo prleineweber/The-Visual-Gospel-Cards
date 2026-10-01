@@ -33,8 +33,8 @@ function Guide() {
         <p className="mt-1 font-display text-lg text-fg-muted">{BOOK.author}</p>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted print:text-stone-600">
           One image a day. See the word, sit with the key verse ({TRANSLATION}),
-          then walk through the definition, gospel response, reflection
-          questions, and prayer. Scripture quotations are from the ESV® Bible.
+          then walk through the definition, reflection questions, gospel
+          response, and prayer. Scripture quotations are from the ESV® Bible.
         </p>
 
         <div className="mt-8 space-y-10">
@@ -62,10 +62,9 @@ function Guide() {
                 Definition
               </p>
               <p className="leading-relaxed">{card.definition}</p>
-              <p className="mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase">
-                Gospel response
+              <p className="mt-3 leading-relaxed">
+                <span className="font-medium">Memory Verse:</span> {card.verse.ref}
               </p>
-              <p className="leading-relaxed">{card.gospelResponse}</p>
               <p className="mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase">
                 Reflection questions
               </p>
@@ -74,6 +73,10 @@ function Guide() {
                   <li key={question}>{question}</li>
                 ))}
               </ol>
+              <p className="mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase">
+                Gospel response
+              </p>
+              <p className="leading-relaxed">{card.gospelResponse}</p>
               <p className="mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase">
                 Prayer
               </p>

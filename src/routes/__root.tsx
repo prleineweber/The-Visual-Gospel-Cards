@@ -19,7 +19,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Thirty pencil studies from Philip Leineweber's Visual Gospel. Swipe through the word, key verse, gospel response, questions, and prayer.",
+          "Thirty pencil studies from Philip Leineweber's Visual Gospel. Swipe through the word, key verse, reflection questions, gospel response, and prayer.",
       },
       { name: "theme-color", content: "#f3eee6" },
     ],

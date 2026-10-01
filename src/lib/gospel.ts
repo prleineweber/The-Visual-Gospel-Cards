@@ -29,8 +29,7 @@ export const LAYERS = [
   { id: "image", label: "Image" },
   { id: "word", label: "Word" },
   { id: "verse", label: "Key verse" },
-  { id: "response", label: "Gospel response" },
-  { id: "questions", label: "Reflection questions" },
+  { id: "response", label: "Reflection Questions" },
   { id: "prayer", label: "Prayer" },
 ] as const;
 
@@ -265,7 +264,7 @@ export const CARDS: GospelCard[] = [
       text: "He himself bore our sins in his body on the tree, that we might die to sin and live to righteousness. By his wounds you have been healed.",
     },
     definition: "Atonement is the once-for-all work of Christ in His life and sacrificial death in which He, as our substitute, bore the penalty of sin, satisfied God’s wrath, fulfilled the demands of divine justice, and reconciled sinners to God securing redemption for all who believe.",
-    gospelResponse: "Grab a pencil, and an eraser. Lightly write some sins that come to your mind in your life or past in the space below with the pencil. Now erase them completely reflecting on the power of the atonement of Christ, the Lamb of God, whose blood covers and cleanses you from all your sin.",
+    gospelResponse: "Grab a piece of paper, pencil, and an eraser. Lightly write some sins that come to your mind in your life or past on the paper then erase them completely and reflect on the power of the atonement of Christ, the Lamb of God, whose blood covers and cleanses you from all your sin.",
     questions: [
       "Have you ever covered up a mistake or something wrong that you did? Did anyone ever find out?",
       "How does Isaiah 1:18 help us understand the extent of the atonement in our lives?",

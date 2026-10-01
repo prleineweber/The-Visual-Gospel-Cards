@@ -1,11 +1,11 @@
 import { i as __toESM } from "../_runtime.mjs";
-import { n as CARDS, r as LAYERS, t as BOOK } from "./gospel-DiKDTYRE.mjs";
+import { n as CARDS, r as LAYERS, t as BOOK } from "./gospel-Be_Ddc2Q.mjs";
 import { R as require_react, _ as Link, y as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as ExternalLink, c as Check, i as Feather, l as BookOpen, n as Printer, o as ChevronRight, r as LayoutGrid, s as ChevronLeft } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as create } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BGpxdc3y.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-BlbDwlkf.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -210,6 +210,9 @@ function FlashDeck() {
 	const direction = (0, import_react.useRef)(1);
 	const scroller = (0, import_react.useRef)(null);
 	const current = LAYERS[layer];
+	(0, import_react.useEffect)(() => {
+		if (layer >= LAYERS.length) setLayer(0);
+	}, [layer, setLayer]);
 	(0, import_react.useEffect)(() => {
 		function onKey(event) {
 			const tag = event.target?.tagName;
@@ -416,6 +419,17 @@ function CardFace({ card, layerId, showHint }) {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-base leading-relaxed text-fg",
 					children: card.definition
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "mt-5 text-base leading-relaxed text-fg",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "font-medium",
+							children: "Memory Verse:"
+						}),
+						" ",
+						card.verse.ref
+					]
 				})
 			] }) : null,
 			layerId === "verse" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -435,14 +449,20 @@ function CardFace({ card, layerId, showHint }) {
 					})
 				]
 			}) : null,
-			layerId === "response" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				className: "mt-2 text-base leading-relaxed text-fg",
-				children: card.gospelResponse
-			}) : null,
-			layerId === "questions" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
-				className: "mt-3 list-decimal space-y-4 pl-5 text-base leading-relaxed text-fg",
-				children: card.questions.map((question) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: question }, question))
-			}) : null,
+			layerId === "response" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+					className: "mt-3 list-decimal space-y-4 pl-5 text-base leading-relaxed text-fg",
+					children: card.questions.map((question) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: question }, question))
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-6 text-xs font-medium tracking-[0.16em] text-fg-muted uppercase",
+					children: "Gospel response"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-2 text-base leading-relaxed text-fg",
+					children: card.gospelResponse
+				})
+			] }) : null,
 			layerId === "prayer" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-2 whitespace-pre-line font-display text-base leading-relaxed text-fg",
 				children: card.prayer
