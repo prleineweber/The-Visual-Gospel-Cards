@@ -5,7 +5,7 @@ import { a as ExternalLink, c as Check, i as Feather, l as BookOpen, n as Printe
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as create } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BfkYlfx6.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-Bv2RMZgP.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -81,22 +81,12 @@ var useAppStore = create((set, get) => {
 		},
 		nextLayer: () => {
 			const { layer, day } = get();
-			if (layer < LAYERS.length - 1) {
-				if (layer === 0) markSeen(day);
-				set({ layer: layer + 1 });
-				return;
-			}
-			const next = day >= CARDS.length ? 1 : day + 1;
-			get().openDay(next);
+			if (layer === 0) markSeen(day);
+			set({ layer: (layer + 1) % LAYERS.length });
 		},
 		prevLayer: () => {
-			const { layer, day } = get();
-			if (layer > 0) {
-				set({ layer: layer - 1 });
-				return;
-			}
-			const prev = day <= 1 ? CARDS.length : day - 1;
-			get().openDay(prev);
+			const { layer } = get();
+			set({ layer: (layer - 1 + LAYERS.length) % LAYERS.length });
 		},
 		setLayer: (layer) => set({ layer }),
 		markKnown: () => {
@@ -254,13 +244,11 @@ function FlashDeck() {
 	if (!card || !current) return null;
 	function goNext() {
 		direction.current = 1;
-		if (layer >= LAYERS.length - 1) nextDay();
-		else nextLayer();
+		nextLayer();
 	}
 	function goPrev() {
 		direction.current = -1;
-		if (layer <= 0) prevDay();
-		else prevLayer();
+		prevLayer();
 	}
 	function onTouchStart(event) {
 		const point = event.changedTouches[0];
@@ -297,7 +285,7 @@ function FlashDeck() {
 			return;
 		}
 		if (absX > 48) {
-			if (dx > 0) goNext();
+			if (dx < 0) goNext();
 			else goPrev();
 		}
 	}
@@ -343,7 +331,7 @@ function FlashDeck() {
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardFace, {
 						card,
 						layerId: current.id,
-						onNextDay: nextDay
+						showHint: card.day === 1
 					})
 				}, `${card.id}-${layer}`), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "flex items-center justify-center gap-1.5 border-t border-border px-3 py-3",
@@ -360,34 +348,34 @@ function FlashDeck() {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mt-3 mb-2 flex items-center gap-2",
+				className: "mt-3 mb-2 grid grid-cols-[1fr_auto_1fr] items-center gap-2",
 				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 						variant: "outline",
-						size: "icon",
+						className: "h-11 px-2 text-[11px] leading-tight sm:text-xs",
 						onClick: goPrev,
-						"aria-label": "Previous",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "size-5" })
+						"aria-label": "Previous Word",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "size-4 shrink-0" }), "Previous Word"]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 						variant: isKnown ? "primary" : "subtle",
-						className: "flex-1",
+						className: "px-3",
 						onClick: markKnown,
 						children: [isKnown ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4" }) : null, isKnown ? "Known" : "Mark known"]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 						variant: "outline",
-						size: "icon",
+						className: "h-11 px-2 text-[11px] leading-tight sm:text-xs",
 						onClick: goNext,
-						"aria-label": "Next",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "size-5" })
+						"aria-label": "Next Word",
+						children: ["Next Word", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "size-4 shrink-0" })]
 					})
 				]
 			})
 		]
 	});
 }
-function CardFace({ card, layerId, onNextDay }) {
+function CardFace({ card, layerId, showHint }) {
 	if (layerId === "image") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "relative flex h-full min-h-[52dvh] items-center justify-center bg-white",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
@@ -395,13 +383,13 @@ function CardFace({ card, layerId, onNextDay }) {
 			alt: card.imageAlt,
 			draggable: false,
 			className: "card-art h-full max-h-[70dvh] w-full object-contain"
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		}), showHint ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 			className: "pointer-events-none absolute inset-x-0 bottom-3 text-center",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 				className: "rounded-full bg-bg/90 px-3 py-1 text-xs tracking-wide text-fg-muted",
-				children: "Swipe right for the word"
+				children: "Swipe left for the word"
 			})
-		})]
+		}) : null]
 	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
 		className: "px-5 py-5",
@@ -449,15 +437,10 @@ function CardFace({ card, layerId, onNextDay }) {
 				className: "mt-3 list-decimal space-y-4 pl-5 text-base leading-relaxed text-fg",
 				children: card.questions.map((question) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: question }, question))
 			}) : null,
-			layerId === "prayer" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			layerId === "prayer" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-2 whitespace-pre-line font-display text-base leading-relaxed text-fg",
 				children: card.prayer
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-				type: "button",
-				onClick: onNextDay,
-				className: "mt-6 text-sm font-medium tracking-wide text-fg-muted uppercase hover:text-fg",
-				children: "Next day"
-			})] }) : null
+			}) : null
 		]
 	});
 }

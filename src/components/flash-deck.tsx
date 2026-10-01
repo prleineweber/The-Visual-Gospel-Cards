@@ -54,14 +54,12 @@ export function FlashDeck() {
 
   function goNext() {
     direction.current = 1;
-    if (layer >= LAYERS.length - 1) nextDay();
-    else nextLayer();
+    nextLayer();
   }
 
   function goPrev() {
     direction.current = -1;
-    if (layer <= 0) prevDay();
-    else prevLayer();
+    prevLayer();
   }
 
   function onTouchStart(event: TouchEvent) {
@@ -101,7 +99,7 @@ export function FlashDeck() {
       return;
     }
     if (absX > 48) {
-      if (dx > 0) goNext();
+      if (dx < 0) goNext();
       else goPrev();
     }
   }
@@ -145,7 +143,7 @@ export function FlashDeck() {
             direction.current === 1 ? "slide-next" : "slide-prev",
           )}
         >
-          <CardFace card={card} layerId={current.id} onNextDay={nextDay} />
+          <CardFace card={card} layerId={current.id} showHint={card.day === 1} />
         </div>
         <div className="flex items-center justify-center gap-1.5 border-t border-border px-3 py-3">
           {LAYERS.map((item, index) => (
@@ -167,20 +165,32 @@ export function FlashDeck() {
         </div>
       </div>
 
-      <div className="mt-3 mb-2 flex items-center gap-2">
-        <Button variant="outline" size="icon" onClick={goPrev} aria-label="Previous">
-          <ChevronLeft className="size-5" />
+      <div className="mt-3 mb-2 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+        <Button
+          variant="outline"
+          className="h-11 px-2 text-[11px] leading-tight sm:text-xs"
+          onClick={goPrev}
+          aria-label="Previous Word"
+        >
+          <ChevronLeft className="size-4 shrink-0" />
+          Previous Word
         </Button>
         <Button
           variant={isKnown ? "primary" : "subtle"}
-          className="flex-1"
+          className="px-3"
           onClick={markKnown}
         >
           {isKnown ? <Check className="size-4" /> : null}
           {isKnown ? "Known" : "Mark known"}
         </Button>
-        <Button variant="outline" size="icon" onClick={goNext} aria-label="Next">
-          <ChevronRight className="size-5" />
+        <Button
+          variant="outline"
+          className="h-11 px-2 text-[11px] leading-tight sm:text-xs"
+          onClick={goNext}
+          aria-label="Next Word"
+        >
+          Next Word
+          <ChevronRight className="size-4 shrink-0" />
         </Button>
       </div>
     </section>
@@ -190,11 +200,11 @@ export function FlashDeck() {
 function CardFace({
   card,
   layerId,
-  onNextDay,
+  showHint,
 }: {
   card: GospelCard;
   layerId: (typeof LAYERS)[number]["id"];
-  onNextDay: () => void;
+  showHint: boolean;
 }) {
   if (layerId === "image") {
     return (
@@ -205,11 +215,13 @@ function CardFace({
           draggable={false}
           className="card-art h-full max-h-[70dvh] w-full object-contain"
         />
-        <p className="pointer-events-none absolute inset-x-0 bottom-3 text-center">
-          <span className="rounded-full bg-bg/90 px-3 py-1 text-xs tracking-wide text-fg-muted">
-            Swipe right for the word
-          </span>
-        </p>
+        {showHint ? (
+          <p className="pointer-events-none absolute inset-x-0 bottom-3 text-center">
+            <span className="rounded-full bg-bg/90 px-3 py-1 text-xs tracking-wide text-fg-muted">
+              Swipe left for the word
+            </span>
+          </p>
+        ) : null}
       </div>
     );
   }
@@ -246,18 +258,9 @@ function CardFace({
         </ol>
       ) : null}
       {layerId === "prayer" ? (
-        <>
-          <p className="mt-2 whitespace-pre-line font-display text-base leading-relaxed text-fg">
-            {card.prayer}
-          </p>
-          <button
-            type="button"
-            onClick={onNextDay}
-            className="mt-6 text-sm font-medium tracking-wide text-fg-muted uppercase hover:text-fg"
-          >
-            Next day
-          </button>
-        </>
+        <p className="mt-2 whitespace-pre-line font-display text-base leading-relaxed text-fg">
+          {card.prayer}
+        </p>
       ) : null}
     </article>
   );

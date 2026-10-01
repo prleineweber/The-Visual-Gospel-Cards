@@ -48,22 +48,12 @@ export const useAppStore = create<AppState>((set, get) => {
     },
     nextLayer: () => {
       const { layer, day } = get();
-      if (layer < LAYERS.length - 1) {
-        if (layer === 0) markSeen(day);
-        set({ layer: layer + 1 });
-        return;
-      }
-      const next = day >= CARDS.length ? 1 : day + 1;
-      get().openDay(next);
+      if (layer === 0) markSeen(day);
+      set({ layer: (layer + 1) % LAYERS.length });
     },
     prevLayer: () => {
-      const { layer, day } = get();
-      if (layer > 0) {
-        set({ layer: layer - 1 });
-        return;
-      }
-      const prev = day <= 1 ? CARDS.length : day - 1;
-      get().openDay(prev);
+      const { layer } = get();
+      set({ layer: (layer - 1 + LAYERS.length) % LAYERS.length });
     },
     setLayer: (layer) => set({ layer }),
     markKnown: () => {
