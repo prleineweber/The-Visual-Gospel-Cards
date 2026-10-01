@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { CARDS, LAYERS } from "./gospel";
 import { loadProgress, markSeen, toggleKnown } from "./progress";
 
-export type Tab = "cards" | "days" | "watch";
+export type Tab = "cards" | "days" | "book";
 
 type AppState = {
   tab: Tab;
@@ -51,11 +51,19 @@ export const useAppStore = create<AppState>((set, get) => {
       if (layer < LAYERS.length - 1) {
         if (layer === 0) markSeen(day);
         set({ layer: layer + 1 });
+        return;
       }
+      const next = day >= CARDS.length ? 1 : day + 1;
+      get().openDay(next);
     },
     prevLayer: () => {
-      const { layer } = get();
-      if (layer > 0) set({ layer: layer - 1 });
+      const { layer, day } = get();
+      if (layer > 0) {
+        set({ layer: layer - 1 });
+        return;
+      }
+      const prev = day <= 1 ? CARDS.length : day - 1;
+      get().openDay(prev);
     },
     setLayer: (layer) => set({ layer }),
     markKnown: () => {

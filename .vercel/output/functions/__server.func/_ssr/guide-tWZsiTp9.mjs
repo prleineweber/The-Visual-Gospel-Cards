@@ -1,7 +1,7 @@
-import { t as CARDS } from "./gospel-K_HqSit3.mjs";
+import { n as CARDS, t as BOOK } from "./gospel-DiKDTYRE.mjs";
 import { _ as Link, y as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
-import { d as ArrowLeft, n as Printer } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/guide-CJaEL_NE.js
+import { n as Printer, u as ArrowLeft } from "../_libs/lucide-react.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/guide-tWZsiTp9.js
 var import_jsx_runtime = require_jsx_runtime();
 function Guide() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -23,18 +23,22 @@ function Guide() {
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "text-xs tracking-[0.18em] text-fg-muted uppercase print:text-stone-500",
-					children: "30-day visual gospel"
+					children: "Companion to the book"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 					className: "mt-1 font-display text-4xl leading-tight",
-					children: "A guide through the images"
+					children: BOOK.title
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-1 font-display text-lg text-fg-muted",
+					children: BOOK.author
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 					className: "mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted print:text-stone-600",
 					children: [
-						"One image a day. See the word, sit with the verse (",
-						"KJV",
-						"), then walk through the definition, gospel truth, and gospel response. Use Save as PDF in the print dialog to keep a copy. Swap in your own wording anytime."
+						"One image a day. See the word, sit with the key verse (",
+						"ESV",
+						"), then walk through the definition, gospel response, reflection questions, and prayer. Scripture quotations are from the ESV® Bible."
 					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -73,19 +77,27 @@ function Guide() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase",
-								children: "Gospel truth"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "leading-relaxed",
-								children: card.gospelTruth
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase",
 								children: "Gospel response"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "leading-relaxed",
 								children: card.gospelResponse
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase",
+								children: "Reflection questions"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+								className: "mt-1 list-decimal space-y-2 pl-5 leading-relaxed",
+								children: card.questions.map((question) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: question }, question))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-4 text-xs font-medium tracking-wide text-fg-muted uppercase",
+								children: "Prayer"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "whitespace-pre-line font-display leading-relaxed",
+								children: card.prayer
 							})
 						]
 					}, card.id))

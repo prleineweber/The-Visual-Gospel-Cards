@@ -21,13 +21,14 @@ export const BOOK = {
   title: "The Visual Gospel",
   author: "Philip Leineweber",
   isbn: "979-8-1943079-3-7",
+  site: "https://visualgospelbook.com",
+  buy: "https://www.amazon.com/dp/B0HLC7QP8N",
 };
 
 export const LAYERS = [
   { id: "image", label: "Image" },
   { id: "word", label: "Word" },
   { id: "verse", label: "Key verse" },
-  { id: "definition", label: "Definition" },
   { id: "response", label: "Gospel response" },
   { id: "questions", label: "Reflection questions" },
   { id: "prayer", label: "Prayer" },
@@ -577,48 +578,6 @@ export const CARDS: GospelCard[] = [
       "In Revelation 3:5, we’re told that those in Christ cannot have their names erased from the Lamb’s Book of Life. How does that truth strengthen your assurance?",
     ],
     prayer: "Sovereign God,\nThank you that you get glory through redemption. Thank you for saving me according to your mercy and grace. May I boldly proclaim the gospel of Jesus Christ, declaring the praises of the one who called me out of darkness and into your marvelous light. You alone deserve the glory and honor and praise in my life. Thank you for the good news of Jesus, my Savior and Lord.\nAmen.",
-  },
-];
-
-export const CHANNEL = {
-  name: "BibleProject",
-  handle: "@bibleproject",
-  url: "https://www.youtube.com/@bibleproject",
-  uploadsList: "UUVfwlh9XpX2Y_tQfjeln9QA",
-  salvationList: "PLH0Szn1yYNefe1R81bcdD3XB3tvHgadjB",
-};
-
-export type WatchVideo = {
-  id: string;
-  title: string;
-  blurb: string;
-};
-
-export const WATCH_VIDEOS: WatchVideo[] = [
-  {
-    id: "HT41M013X3A",
-    title: "Gospel",
-    blurb: "What the word gospel actually means in the Bible.",
-  },
-  {
-    id: "xmFPS0f-kzs",
-    title: "How Jesus Became King",
-    blurb: "The good news of God's kingdom arriving in Jesus.",
-  },
-  {
-    id: "xrzq_X1NNaA",
-    title: "The Gospel",
-    blurb: "Why Matthew, Mark, Luke, and John were written.",
-  },
-  {
-    id: "G_OlRWGLdnw",
-    title: "Sacrifice and Atonement",
-    blurb: "How the sacrifices of Scripture point to Jesus.",
-  },
-  {
-    id: "GGCF3OPWN14",
-    title: "Gospel of Matthew, Part 2",
-    blurb: "Jesus' death, resurrection, and the great commission.",
   },
 ];
 

@@ -2,8 +2,8 @@ import { i as __toESM, n as __exportAll } from "../_runtime.mjs";
 import { R as require_react, f as createRouter, g as createRootRoute, h as createFileRoute, l as Scripts, m as lazyRouteComponent, p as Outlet, u as HeadContent, v as useRouter, y as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BGMzEmPB.js
-var router_BGMzEmPB_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CAmpRWSa.js
+var router_CAmpRWSa_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
@@ -297,7 +297,7 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/assets/styles-Dqj7GD1n.css";
+var styles_default = "/assets/styles-BJ1IqSFg.css";
 var APP_NAME = "Visual Gospel";
 var Route$2 = createRootRoute({
 	head: () => ({
@@ -310,7 +310,7 @@ var Route$2 = createRootRoute({
 			{ title: APP_NAME },
 			{
 				name: "description",
-				content: "Thirty visual gospel images. Swipe right through the word, verse, definition, truth, and response."
+				content: "Thirty pencil studies from Philip Leineweber's Visual Gospel. Swipe through the word, key verse, gospel response, questions, and prayer."
 			},
 			{
 				name: "theme-color",
@@ -364,9 +364,9 @@ var Route$2 = createRootRoute({
 		})]
 	})
 });
-var $$splitComponentImporter$1 = () => import("./routes-Du_diLFA.mjs");
+var $$splitComponentImporter$1 = () => import("./routes-BfkYlfx6.mjs");
 var Route$1 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./guide-CJaEL_NE.mjs");
+var $$splitComponentImporter = () => import("./guide-tWZsiTp9.mjs");
 var Route = createFileRoute("/guide")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var rootRouteChildren = {
 	IndexRoute: Route$1.update({
@@ -388,4 +388,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { getRouter, router_BGMzEmPB_exports as t };
+export { getRouter, router_CAmpRWSa_exports as t };

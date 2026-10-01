@@ -1,6 +1,6 @@
-import { useEffect, useRef, type TouchEvent } from "react";
-import { Check, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
-import { BOOK, CARDS, LAYERS, TRANSLATION } from "@/lib/gospel";
+import { useEffect, useRef, type MouseEvent, type TouchEvent } from "react";
+import { Check, ChevronLeft, ChevronRight } from "lucide-react";
+import { BOOK, CARDS, LAYERS, TRANSLATION, type GospelCard } from "@/lib/gospel";
 import { useAppStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,18 +18,31 @@ export function FlashDeck() {
   const card = CARDS[day - 1];
   const isKnown = known.includes(day);
   const touch = useRef<{ x: number; y: number; t: number } | null>(null);
+  const moved = useRef(false);
+  const direction = useRef<1 | -1>(1);
+  const scroller = useRef<HTMLDivElement>(null);
   const current = LAYERS[layer];
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
-      if (event.key === "ArrowRight") nextLayer();
-      if (event.key === "ArrowLeft") prevLayer();
+      const tag = (event.target as HTMLElement | null)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "IFRAME") return;
+      if (event.key === "ArrowRight") {
+        direction.current = 1;
+        nextLayer();
+      }
+      if (event.key === "ArrowLeft") {
+        direction.current = -1;
+        prevLayer();
+      }
       if (event.key === "ArrowUp") {
         event.preventDefault();
+        direction.current = 1;
         nextDay();
       }
       if (event.key === "ArrowDown") {
         event.preventDefault();
+        direction.current = -1;
         prevDay();
       }
     }
@@ -37,11 +50,24 @@ export function FlashDeck() {
     return () => window.removeEventListener("keydown", onKey);
   }, [nextDay, nextLayer, prevDay, prevLayer]);
 
-  if (!card) return null;
+  if (!card || !current) return null;
+
+  function goNext() {
+    direction.current = 1;
+    if (layer >= LAYERS.length - 1) nextDay();
+    else nextLayer();
+  }
+
+  function goPrev() {
+    direction.current = -1;
+    if (layer <= 0) prevDay();
+    else prevLayer();
+  }
 
   function onTouchStart(event: TouchEvent) {
     const point = event.changedTouches[0];
     touch.current = { x: point.clientX, y: point.clientY, t: Date.now() };
+    moved.current = false;
   }
 
   function onTouchEnd(event: TouchEvent) {
@@ -51,23 +77,47 @@ export function FlashDeck() {
     const dy = point.clientY - touch.current.y;
     const dt = Date.now() - touch.current.t;
     touch.current = null;
-    if (dt > 700) return;
     const absX = Math.abs(dx);
     const absY = Math.abs(dy);
+    if (absX > 10 || absY > 10) moved.current = true;
+    if (dt > 700) return;
     if (absX < 40 && absY < 40) return;
-    if (absY > absX && absY > 48) {
-      if (dy < 0) nextDay();
-      else prevDay();
+
+    const node = scroller.current;
+    const canScroll =
+      layer !== 0 &&
+      !!node &&
+      node.scrollHeight > node.clientHeight + 8;
+
+    if (absY > absX && absY > 56) {
+      if (canScroll) return;
+      if (dy < 0) {
+        direction.current = 1;
+        nextDay();
+      } else {
+        direction.current = -1;
+        prevDay();
+      }
       return;
     }
     if (absX > 48) {
-      if (dx > 0) nextLayer();
-      else prevLayer();
+      if (dx > 0) goNext();
+      else goPrev();
     }
   }
 
+  function onCardClick(event: MouseEvent) {
+    if (moved.current) {
+      moved.current = false;
+      return;
+    }
+    const target = event.target as HTMLElement;
+    if (target.closest("button, a")) return;
+    goNext();
+  }
+
   return (
-    <section className="mx-auto flex w-full max-w-lg flex-1 flex-col px-4 pt-3">
+    <section className="mx-auto flex min-h-0 w-full max-w-lg flex-1 flex-col px-4 pt-3">
       <header className="mb-3 flex items-end justify-between gap-3">
         <div>
           <p className="text-xs font-medium tracking-[0.18em] text-fg-muted uppercase">
@@ -78,109 +128,47 @@ export function FlashDeck() {
             <span className="text-fg-muted"> / {CARDS.length}</span>
           </h1>
         </div>
-        <p className="text-xs text-fg-muted tabular-nums">
-          {known.length} known
-        </p>
+        <p className="text-xs text-fg-muted tabular-nums">{known.length} known</p>
       </header>
 
-      <div className="flex min-h-0 flex-1 flex-col">
-        <button
-          type="button"
-          onClick={nextLayer}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-          className="relative aspect-card w-full overflow-hidden rounded-lg bg-bg-elevated shadow-[var(--shadow-border)]"
-          aria-label={
-            layer === 0
-              ? `Reveal the word for day ${card.day}`
-              : `Next: ${LAYERS[Math.min(layer + 1, LAYERS.length - 1)].label}`
-          }
+      <div
+        className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg bg-white shadow-[var(--shadow-border)]"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        onClick={onCardClick}
+      >
+        <div
+          key={`${card.id}-${layer}`}
+          ref={scroller}
+          className={cn(
+            "min-h-0 flex-1 overflow-y-auto",
+            direction.current === 1 ? "slide-next" : "slide-prev",
+          )}
         >
-          <img
-            src={card.image}
-            alt={card.imageAlt}
-            className="card-art h-full w-full object-contain"
-          />
-        </button>
-
-        <div className="mt-3 flex items-center justify-center gap-1.5">
+          <CardFace card={card} layerId={current.id} onNextDay={nextDay} />
+        </div>
+        <div className="flex items-center justify-center gap-1.5 border-t border-border px-3 py-3">
           {LAYERS.map((item, index) => (
             <button
               key={item.id}
               type="button"
               aria-label={item.label}
               aria-current={index === layer}
-              onClick={() => setLayer(index)}
+              onClick={() => {
+                direction.current = index >= layer ? 1 : -1;
+                setLayer(index);
+              }}
               className={cn(
                 "h-2 rounded-full transition-[width,background-color] duration-200",
-                index === layer
-                  ? "w-5 bg-accent"
-                  : "w-2 bg-bg-subtle hover:bg-border-strong",
+                index === layer ? "w-5 bg-accent" : "w-2 bg-bg-subtle hover:bg-border-strong",
               )}
             />
           ))}
         </div>
-
-        <div
-          key={`${card.id}-${layer}`}
-          className="rise-in mt-3 min-h-32 flex-1 overflow-y-auto rounded-lg bg-bg-elevated px-4 py-4 shadow-[var(--shadow-border)]"
-        >
-          <p className="text-xs font-medium tracking-[0.16em] text-fg-muted uppercase">
-            {current.label}
-          </p>
-          {layer === 0 ? (
-            <p className="mt-2 text-sm leading-relaxed text-fg-muted">
-              Tap or swipe right for the word, verse, definition, gospel
-              response, questions, and prayer.
-            </p>
-          ) : null}
-          {layer === 1 ? (
-            <h2 className="mt-1 font-display text-4xl leading-tight text-fg">
-              {card.word}
-            </h2>
-          ) : null}
-          {layer === 2 ? (
-            <div className="mt-1">
-              <p className="font-display text-xl text-fg">{card.verse.ref}</p>
-              <p className="mt-2 font-display text-lg leading-relaxed text-fg">
-                {card.verse.text}
-              </p>
-              <p className="mt-2 text-xs text-fg-subtle">{TRANSLATION}</p>
-            </div>
-          ) : null}
-          {layer === 3 ? (
-            <p className="mt-2 text-base leading-relaxed text-fg">
-              {card.definition}
-            </p>
-          ) : null}
-          {layer === 4 ? (
-            <p className="mt-2 text-base leading-relaxed text-fg">
-              {card.gospelResponse}
-            </p>
-          ) : null}
-          {layer === 5 ? (
-            <ol className="mt-2 list-decimal space-y-3 pl-5 text-base leading-relaxed text-fg">
-              {card.questions.map((question) => (
-                <li key={question}>{question}</li>
-              ))}
-            </ol>
-          ) : null}
-          {layer === 6 ? (
-            <p className="mt-2 whitespace-pre-line font-display text-base leading-relaxed text-fg">
-              {card.prayer}
-            </p>
-          ) : null}
-        </div>
       </div>
 
       <div className="mt-3 mb-2 flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={prevLayer}
-          aria-label="Previous step"
-          disabled={layer === 0}
-        >
+        <Button variant="outline" size="icon" onClick={goPrev} aria-label="Previous">
           <ChevronLeft className="size-5" />
         </Button>
         <Button
@@ -191,22 +179,86 @@ export function FlashDeck() {
           {isKnown ? <Check className="size-4" /> : null}
           {isKnown ? "Known" : "Mark known"}
         </Button>
-        <Button variant="outline" size="icon" onClick={nextDay} aria-label="Next day">
-          <ChevronUp className="size-5" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={nextLayer}
-          aria-label="Next step"
-          disabled={layer === LAYERS.length - 1}
-        >
+        <Button variant="outline" size="icon" onClick={goNext} aria-label="Next">
           <ChevronRight className="size-5" />
         </Button>
       </div>
-      <p className="mb-2 text-center text-xs text-fg-subtle">
-        From {BOOK.title} · {BOOK.author}
-      </p>
     </section>
+  );
+}
+
+function CardFace({
+  card,
+  layerId,
+  onNextDay,
+}: {
+  card: GospelCard;
+  layerId: (typeof LAYERS)[number]["id"];
+  onNextDay: () => void;
+}) {
+  if (layerId === "image") {
+    return (
+      <div className="relative flex h-full min-h-[52dvh] items-center justify-center bg-white">
+        <img
+          src={card.image}
+          alt={card.imageAlt}
+          draggable={false}
+          className="card-art h-full max-h-[70dvh] w-full object-contain"
+        />
+        <p className="pointer-events-none absolute inset-x-0 bottom-3 text-center">
+          <span className="rounded-full bg-bg/90 px-3 py-1 text-xs tracking-wide text-fg-muted">
+            Swipe right for the word
+          </span>
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <article className="px-5 py-5">
+      <p className="text-xs font-medium tracking-[0.16em] text-fg-muted uppercase">
+        {LAYERS.find((item) => item.id === layerId)?.label}
+      </p>
+      {layerId === "word" ? (
+        <>
+          <h2 className="mt-2 font-display text-5xl leading-none text-fg">{card.word}</h2>
+          <p className="mt-6 text-xs font-medium tracking-[0.16em] text-fg-muted uppercase">
+            Definition
+          </p>
+          <p className="mt-2 text-base leading-relaxed text-fg">{card.definition}</p>
+        </>
+      ) : null}
+      {layerId === "verse" ? (
+        <div className="mt-2">
+          <p className="font-display text-xl text-fg">{card.verse.ref}</p>
+          <p className="mt-3 font-display text-lg leading-relaxed text-fg">{card.verse.text}</p>
+          <p className="mt-3 text-xs text-fg-subtle">{TRANSLATION}</p>
+        </div>
+      ) : null}
+      {layerId === "response" ? (
+        <p className="mt-2 text-base leading-relaxed text-fg">{card.gospelResponse}</p>
+      ) : null}
+      {layerId === "questions" ? (
+        <ol className="mt-3 list-decimal space-y-4 pl-5 text-base leading-relaxed text-fg">
+          {card.questions.map((question) => (
+            <li key={question}>{question}</li>
+          ))}
+        </ol>
+      ) : null}
+      {layerId === "prayer" ? (
+        <>
+          <p className="mt-2 whitespace-pre-line font-display text-base leading-relaxed text-fg">
+            {card.prayer}
+          </p>
+          <button
+            type="button"
+            onClick={onNextDay}
+            className="mt-6 text-sm font-medium tracking-wide text-fg-muted uppercase hover:text-fg"
+          >
+            Next day
+          </button>
+        </>
+      ) : null}
+    </article>
   );
 }

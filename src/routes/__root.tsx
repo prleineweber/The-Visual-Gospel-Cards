@@ -19,7 +19,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Thirty visual gospel images from Philip Leineweber's 30-day devotional. Swipe through the word, verse, definition, gospel response, questions, and prayer.",
+          "Thirty pencil studies from Philip Leineweber's Visual Gospel. Swipe through the word, key verse, gospel response, questions, and prayer.",
       },
       { name: "theme-color", content: "#f3eee6" },
     ],

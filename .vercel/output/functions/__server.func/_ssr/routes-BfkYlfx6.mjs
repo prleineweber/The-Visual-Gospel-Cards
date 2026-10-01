@@ -1,17 +1,17 @@
 import { i as __toESM } from "../_runtime.mjs";
-import { i as WATCH_VIDEOS, n as CHANNEL, r as LAYERS, t as CARDS } from "./gospel-K_HqSit3.mjs";
+import { n as CARDS, r as LAYERS, t as BOOK } from "./gospel-DiKDTYRE.mjs";
 import { R as require_react, _ as Link, y as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
-import { a as ExternalLink, c as ChevronLeft, i as LayoutGrid, l as Check, n as Printer, o as ChevronUp, r as Play, s as ChevronRight, u as BookOpen } from "../_libs/lucide-react.mjs";
+import { a as ExternalLink, c as Check, i as Feather, l as BookOpen, n as Printer, o as ChevronRight, r as LayoutGrid, s as ChevronLeft } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as create } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-Du_diLFA.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-BfkYlfx6.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
 	return twMerge(clsx(inputs));
 }
-var KEY = "visual-gospel-progress-v1";
+var KEY$1 = "visual-gospel-progress-v1";
 var empty = {
 	seen: [],
 	known: [],
@@ -20,7 +20,7 @@ var empty = {
 function loadProgress() {
 	if (typeof window === "undefined") return empty;
 	try {
-		const raw = localStorage.getItem(KEY);
+		const raw = localStorage.getItem(KEY$1);
 		if (!raw) return empty;
 		const parsed = JSON.parse(raw);
 		return {
@@ -33,7 +33,7 @@ function loadProgress() {
 	}
 }
 function saveProgress(next) {
-	localStorage.setItem(KEY, JSON.stringify(next));
+	localStorage.setItem(KEY$1, JSON.stringify(next));
 }
 function markSeen(day) {
 	const current = loadProgress();
@@ -84,11 +84,19 @@ var useAppStore = create((set, get) => {
 			if (layer < LAYERS.length - 1) {
 				if (layer === 0) markSeen(day);
 				set({ layer: layer + 1 });
+				return;
 			}
+			const next = day >= CARDS.length ? 1 : day + 1;
+			get().openDay(next);
 		},
 		prevLayer: () => {
-			const { layer } = get();
-			if (layer > 0) set({ layer: layer - 1 });
+			const { layer, day } = get();
+			if (layer > 0) {
+				set({ layer: layer - 1 });
+				return;
+			}
+			const prev = day <= 1 ? CARDS.length : day - 1;
+			get().openDay(prev);
 		},
 		setLayer: (layer) => set({ layer }),
 		markKnown: () => {
@@ -109,9 +117,9 @@ var ITEMS = [
 		icon: LayoutGrid
 	},
 	{
-		id: "watch",
-		label: "Watch",
-		icon: Play
+		id: "book",
+		label: "Visual Gospel",
+		icon: Feather
 	}
 ];
 function BottomNav() {
@@ -128,15 +136,43 @@ function BottomNav() {
 				return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 					type: "button",
 					onClick: () => setTab(item.id),
-					className: cn("flex min-h-14 flex-col items-center justify-center gap-1 text-xs font-medium transition-colors duration-150", active ? "text-fg" : "text-fg-muted hover:text-fg"),
+					className: cn("flex min-h-14 flex-col items-center justify-center gap-1 px-1 text-[11px] font-medium leading-tight transition-colors duration-150", active ? "text-fg" : "text-fg-muted hover:text-fg"),
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
-						className: cn("size-5", item.id === "watch" && "ml-0.5"),
+						className: "size-5",
 						strokeWidth: active ? 2.2 : 1.8
-					}), item.label]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-center",
+						children: item.label
+					})]
 				}, item.id);
 			})
 		})
 	});
+}
+var KEY = "vg-entered";
+function EnterGate({ children }) {
+	const [gate, setGate] = (0, import_react.useState)("splash");
+	(0, import_react.useEffect)(() => {
+		if (sessionStorage.getItem(KEY) === "1") setGate("app");
+	}, []);
+	function enter() {
+		sessionStorage.setItem(KEY, "1");
+		setGate("app");
+	}
+	if (gate === "splash") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+		type: "button",
+		onClick: enter,
+		className: "flex min-h-dvh w-full flex-col items-center justify-center bg-bg px-6 py-10 text-center",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+			src: "/cover.jpg",
+			alt: `${BOOK.title} by ${BOOK.author}`,
+			className: "w-full max-w-sm rounded-sm shadow-[var(--shadow-border)]"
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "mt-6 text-sm font-medium tracking-[0.22em] text-fg-muted uppercase",
+			children: "Click or tap to enter"
+		})]
+	});
+	return children;
 }
 var buttonVariants = cva("inline-flex items-center justify-center gap-2 font-medium transition-[opacity,transform,background-color,color] duration-150 ease-out active:not-disabled:scale-[0.96] disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70", {
 	variants: {
@@ -180,17 +216,30 @@ function FlashDeck() {
 	const card = CARDS[day - 1];
 	const isKnown = known.includes(day);
 	const touch = (0, import_react.useRef)(null);
+	const moved = (0, import_react.useRef)(false);
+	const direction = (0, import_react.useRef)(1);
+	const scroller = (0, import_react.useRef)(null);
 	const current = LAYERS[layer];
 	(0, import_react.useEffect)(() => {
 		function onKey(event) {
-			if (event.key === "ArrowRight") nextLayer();
-			if (event.key === "ArrowLeft") prevLayer();
+			const tag = event.target?.tagName;
+			if (tag === "INPUT" || tag === "TEXTAREA" || tag === "IFRAME") return;
+			if (event.key === "ArrowRight") {
+				direction.current = 1;
+				nextLayer();
+			}
+			if (event.key === "ArrowLeft") {
+				direction.current = -1;
+				prevLayer();
+			}
 			if (event.key === "ArrowUp") {
 				event.preventDefault();
+				direction.current = 1;
 				nextDay();
 			}
 			if (event.key === "ArrowDown") {
 				event.preventDefault();
+				direction.current = -1;
 				prevDay();
 			}
 		}
@@ -202,7 +251,17 @@ function FlashDeck() {
 		prevDay,
 		prevLayer
 	]);
-	if (!card) return null;
+	if (!card || !current) return null;
+	function goNext() {
+		direction.current = 1;
+		if (layer >= LAYERS.length - 1) nextDay();
+		else nextLayer();
+	}
+	function goPrev() {
+		direction.current = -1;
+		if (layer <= 0) prevDay();
+		else prevLayer();
+	}
 	function onTouchStart(event) {
 		const point = event.changedTouches[0];
 		touch.current = {
@@ -210,6 +269,7 @@ function FlashDeck() {
 			y: point.clientY,
 			t: Date.now()
 		};
+		moved.current = false;
 	}
 	function onTouchEnd(event) {
 		if (!touch.current) return;
@@ -218,28 +278,45 @@ function FlashDeck() {
 		const dy = point.clientY - touch.current.y;
 		const dt = Date.now() - touch.current.t;
 		touch.current = null;
-		if (dt > 700) return;
 		const absX = Math.abs(dx);
 		const absY = Math.abs(dy);
+		if (absX > 10 || absY > 10) moved.current = true;
+		if (dt > 700) return;
 		if (absX < 40 && absY < 40) return;
-		if (absY > absX && absY > 48) {
-			if (dy < 0) nextDay();
-			else prevDay();
+		const node = scroller.current;
+		const canScroll = layer !== 0 && !!node && node.scrollHeight > node.clientHeight + 8;
+		if (absY > absX && absY > 56) {
+			if (canScroll) return;
+			if (dy < 0) {
+				direction.current = 1;
+				nextDay();
+			} else {
+				direction.current = -1;
+				prevDay();
+			}
 			return;
 		}
 		if (absX > 48) {
-			if (dx > 0) nextLayer();
-			else prevLayer();
+			if (dx > 0) goNext();
+			else goPrev();
 		}
 	}
+	function onCardClick(event) {
+		if (moved.current) {
+			moved.current = false;
+			return;
+		}
+		if (event.target.closest("button, a")) return;
+		goNext();
+	}
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-		className: "mx-auto flex w-full max-w-lg flex-1 flex-col px-4 pt-3",
+		className: "mx-auto flex min-h-0 w-full max-w-lg flex-1 flex-col px-4 pt-3",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
 				className: "mb-3 flex items-end justify-between gap-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "text-xs font-medium tracking-[0.18em] text-fg-muted uppercase",
-					children: "Visual Gospel"
+					children: BOOK.title
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
 					className: "font-display text-2xl leading-tight text-fg",
 					children: [
@@ -256,78 +333,31 @@ function FlashDeck() {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex min-h-0 flex-1 flex-col",
+				className: "flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg bg-white shadow-[var(--shadow-border)]",
 				onTouchStart,
 				onTouchEnd,
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				onClick: onCardClick,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					ref: scroller,
+					className: cn("min-h-0 flex-1 overflow-y-auto", direction.current === 1 ? "slide-next" : "slide-prev"),
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardFace, {
+						card,
+						layerId: current.id,
+						onNextDay: nextDay
+					})
+				}, `${card.id}-${layer}`), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex items-center justify-center gap-1.5 border-t border-border px-3 py-3",
+					children: LAYERS.map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						type: "button",
-						onClick: nextLayer,
-						className: "relative aspect-card w-full overflow-hidden rounded-lg bg-bg-elevated shadow-[var(--shadow-border)]",
-						"aria-label": layer === 0 ? `Reveal the word for day ${card.day}` : `Next: ${LAYERS[Math.min(layer + 1, LAYERS.length - 1)].label}`,
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							src: card.image,
-							alt: card.imageAlt,
-							className: "card-art h-full w-full object-contain"
-						})
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "mt-3 flex items-center justify-center gap-1.5",
-						children: LAYERS.map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							"aria-label": item.label,
-							"aria-current": index === layer,
-							onClick: () => setLayer(index),
-							className: cn("h-2 rounded-full transition-[width,background-color] duration-200", index === layer ? "w-5 bg-accent" : "w-2 bg-bg-subtle hover:bg-border-strong")
-						}, item.id))
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "rise-in mt-3 min-h-32 rounded-lg bg-bg-elevated px-4 py-4 shadow-[var(--shadow-border)]",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-xs font-medium tracking-[0.16em] text-fg-muted uppercase",
-								children: current.label
-							}),
-							layer === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-2 text-sm leading-relaxed text-fg-muted",
-								children: "Tap the image or swipe right to see the word."
-							}) : null,
-							layer === 1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-								className: "mt-1 font-display text-4xl leading-tight text-fg",
-								children: card.word
-							}) : null,
-							layer === 2 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "mt-1",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "font-display text-xl text-fg",
-										children: card.verse.ref
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "mt-2 font-display text-lg leading-relaxed text-fg",
-										children: card.verse.text
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "mt-2 text-xs text-fg-subtle",
-										children: "KJV"
-									})
-								]
-							}) : null,
-							layer === 3 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-2 text-base leading-relaxed text-fg",
-								children: card.definition
-							}) : null,
-							layer === 4 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-2 text-base leading-relaxed text-fg",
-								children: card.gospelTruth
-							}) : null,
-							layer === 5 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-2 text-base leading-relaxed text-fg",
-								children: card.gospelResponse
-							}) : null
-						]
-					}, `${card.id}-${layer}`)
-				]
+						"aria-label": item.label,
+						"aria-current": index === layer,
+						onClick: () => {
+							direction.current = index >= layer ? 1 : -1;
+							setLayer(index);
+						},
+						className: cn("h-2 rounded-full transition-[width,background-color] duration-200", index === layer ? "w-5 bg-accent" : "w-2 bg-bg-subtle hover:bg-border-strong")
+					}, item.id))
+				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "mt-3 mb-2 flex items-center gap-2",
@@ -335,9 +365,8 @@ function FlashDeck() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 						variant: "outline",
 						size: "icon",
-						onClick: prevLayer,
-						"aria-label": "Previous step",
-						disabled: layer === 0,
+						onClick: goPrev,
+						"aria-label": "Previous",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "size-5" })
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
@@ -349,24 +378,86 @@ function FlashDeck() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 						variant: "outline",
 						size: "icon",
-						onClick: nextDay,
-						"aria-label": "Next day",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronUp, { className: "size-5" })
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-						variant: "outline",
-						size: "icon",
-						onClick: nextLayer,
-						"aria-label": "Next step",
-						disabled: layer === LAYERS.length - 1,
+						onClick: goNext,
+						"aria-label": "Next",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "size-5" })
 					})
 				]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				className: "mb-2 text-center text-xs text-fg-subtle",
-				children: "Swipe right for the next step · swipe up for the next day"
 			})
+		]
+	});
+}
+function CardFace({ card, layerId, onNextDay }) {
+	if (layerId === "image") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "relative flex h-full min-h-[52dvh] items-center justify-center bg-white",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+			src: card.image,
+			alt: card.imageAlt,
+			draggable: false,
+			className: "card-art h-full max-h-[70dvh] w-full object-contain"
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "pointer-events-none absolute inset-x-0 bottom-3 text-center",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "rounded-full bg-bg/90 px-3 py-1 text-xs tracking-wide text-fg-muted",
+				children: "Swipe right for the word"
+			})
+		})]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+		className: "px-5 py-5",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs font-medium tracking-[0.16em] text-fg-muted uppercase",
+				children: LAYERS.find((item) => item.id === layerId)?.label
+			}),
+			layerId === "word" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+					className: "mt-2 font-display text-5xl leading-none text-fg",
+					children: card.word
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-6 text-xs font-medium tracking-[0.16em] text-fg-muted uppercase",
+					children: "Definition"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-2 text-base leading-relaxed text-fg",
+					children: card.definition
+				})
+			] }) : null,
+			layerId === "verse" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-2",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "font-display text-xl text-fg",
+						children: card.verse.ref
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-3 font-display text-lg leading-relaxed text-fg",
+						children: card.verse.text
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-3 text-xs text-fg-subtle",
+						children: "ESV"
+					})
+				]
+			}) : null,
+			layerId === "response" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-2 text-base leading-relaxed text-fg",
+				children: card.gospelResponse
+			}) : null,
+			layerId === "questions" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+				className: "mt-3 list-decimal space-y-4 pl-5 text-base leading-relaxed text-fg",
+				children: card.questions.map((question) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: question }, question))
+			}) : null,
+			layerId === "prayer" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-2 whitespace-pre-line font-display text-base leading-relaxed text-fg",
+				children: card.prayer
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				onClick: onNextDay,
+				className: "mt-6 text-sm font-medium tracking-wide text-fg-muted uppercase hover:text-fg",
+				children: "Next day"
+			})] }) : null
 		]
 	});
 }
@@ -425,119 +516,103 @@ function Gallery() {
 		})]
 	});
 }
-function WatchPanel() {
-	const [active, setActive] = (0, import_react.useState)(WATCH_VIDEOS[0].id);
-	const [mode, setMode] = (0, import_react.useState)("video");
-	const current = WATCH_VIDEOS.find((video) => video.id === active) ?? WATCH_VIDEOS[0];
-	const src = mode === "channel" ? `https://www.youtube-nocookie.com/embed/videoseries?list=${CHANNEL.uploadsList}` : `https://www.youtube-nocookie.com/embed/${current.id}`;
+var EXTRA = ["/cover.jpg", "/book-desk.jpg"];
+function PreloadArt() {
+	(0, import_react.useEffect)(() => {
+		[...EXTRA, ...CARDS.map((card) => card.image)].forEach((src, index) => {
+			const img = new Image();
+			img.decoding = "async";
+			if ("fetchPriority" in img) img.fetchPriority = index < 3 ? "high" : "low";
+			img.src = src;
+		});
+	}, []);
+	return null;
+}
+function SitePanel() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-		className: "mx-auto w-full max-w-3xl px-4 pt-3 pb-4",
+		className: "mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 pt-3 pb-4",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
 				className: "mb-4",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "text-xs font-medium tracking-[0.18em] text-fg-muted uppercase",
-						children: "Watch"
+						children: "The book"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 						className: "font-display text-3xl leading-tight text-fg",
-						children: CHANNEL.name
+						children: "Visual Gospel"
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 						className: "mt-1 max-w-xl text-sm leading-relaxed text-fg-muted",
-						children: "Visual teaching on the gospel, the kingdom, and the story of Scripture."
+						children: [
+							"A 30-day devotional exploring the good news of Jesus, by ",
+							BOOK.author,
+							"."
+						]
 					})
 				]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
 				className: "overflow-hidden rounded-xl bg-bg-elevated shadow-[var(--shadow-border)]",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "aspect-video bg-bg-subtle",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("iframe", {
-						title: mode === "channel" ? `${CHANNEL.name} channel` : current.title,
-						src,
-						className: "h-full w-full",
-						allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
-						allowFullScreen: true
-					}, src)
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+					src: "/book-desk.jpg",
+					alt: "The Visual Gospel paperback on a desk beside a pencil, flowers, and a glass of juice",
+					className: "aspect-[4/5] w-full object-cover object-center sm:aspect-[16/10]"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex gap-2 border-t border-border p-3",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							onClick: () => setMode("video"),
-							className: cn("h-10 rounded-full px-4 text-sm font-medium", mode === "video" ? "bg-accent text-accent-fg" : "bg-bg-subtle text-fg-muted"),
-							children: "Featured"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							onClick: () => setMode("channel"),
-							className: cn("h-10 rounded-full px-4 text-sm font-medium", mode === "channel" ? "bg-accent text-accent-fg" : "bg-bg-subtle text-fg-muted"),
-							children: "Channel"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-							href: CHANNEL.url,
-							target: "_blank",
-							rel: "noreferrer",
-							className: "ml-auto inline-flex h-10 items-center gap-1.5 px-2 text-sm text-fg-muted hover:text-fg",
-							children: ["Open YouTube", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "size-3.5" })]
-						})
-					]
+					className: "flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "font-display text-xl text-fg",
+						children: BOOK.title
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-sm text-fg-muted",
+						children: BOOK.author
+					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+						href: BOOK.buy,
+						target: "_blank",
+						rel: "noreferrer",
+						className: "inline-flex h-11 items-center justify-center gap-2 rounded-md bg-accent px-4 text-sm font-medium text-accent-fg hover:opacity-90",
+						children: ["Buy devotional", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "size-3.5" })]
+					})]
 				})]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
-				className: "mt-5 space-y-2",
-				children: [WATCH_VIDEOS.map((video) => {
-					const selected = mode === "video" && video.id === active;
-					return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-						type: "button",
-						onClick: () => {
-							setMode("video");
-							setActive(video.id);
-						},
-						className: cn("flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors duration-150", selected ? "bg-bg-elevated" : "hover:bg-bg-subtle"),
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: cn("mt-0.5 size-2 shrink-0 rounded-full", selected ? "bg-accent" : "bg-border-strong") }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "block font-medium text-fg",
-							children: video.title
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "mt-0.5 block text-sm text-fg-muted",
-							children: video.blurb
-						})] })]
-					}) }, video.id);
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-					type: "button",
-					onClick: () => setMode("channel"),
-					className: "flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left hover:bg-bg-subtle",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "mt-0.5 size-2 shrink-0 rounded-full bg-border-strong" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-						className: "block font-medium text-fg",
-						children: [
-							"Full ",
-							CHANNEL.name,
-							" channel"
-						]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "mt-0.5 block text-sm text-fg-muted",
-						children: "Browse the embedded channel feed without leaving the app."
-					})] })]
-				}) })]
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-4 flex items-center justify-between gap-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs font-medium tracking-[0.16em] text-fg-muted uppercase",
+					children: "visualgospelbook.com"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+					href: BOOK.site,
+					target: "_blank",
+					rel: "noreferrer",
+					className: "inline-flex items-center gap-1.5 text-sm text-fg-muted hover:text-fg",
+					children: ["Open site", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "size-3.5" })]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-2 min-h-[70vh] flex-1 overflow-hidden rounded-xl bg-bg-elevated shadow-[var(--shadow-border)]",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("iframe", {
+					title: "Visual Gospel website",
+					src: BOOK.site,
+					className: "h-[70vh] w-full bg-white"
+				})
 			})
 		]
 	});
 }
 function AppShell() {
 	const tab = useAppStore((s) => s.tab);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreloadArt, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EnterGate, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "flex min-h-dvh flex-col bg-bg text-fg",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
-			className: "flex flex-1 flex-col pb-20",
+			className: "flex min-h-0 flex-1 flex-col pb-20",
 			children: [
 				tab === "cards" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FlashDeck, {}) : null,
 				tab === "days" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Gallery, {}) : null,
-				tab === "watch" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WatchPanel, {}) : null
+				tab === "book" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SitePanel, {}) : null
 			]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BottomNav, {})]
-	});
+	}) })] });
 }
 function Home() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppShell, {});

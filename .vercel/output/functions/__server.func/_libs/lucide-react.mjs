@@ -138,16 +138,6 @@ var ChevronRight = createLucideIcon("chevron-right", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-var ChevronUp = createLucideIcon("chevron-up", [["path", {
-	d: "m18 15-6-6-6 6",
-	key: "153udz"
-}]]);
-/**
-* @license lucide-react v0.510.0 - ISC
-*
-* This source code is licensed under the ISC license.
-* See the LICENSE file in the root directory of this source tree.
-*/
 var ExternalLink = createLucideIcon("external-link", [
 	["path", {
 		d: "M15 3h6v6",
@@ -160,6 +150,26 @@ var ExternalLink = createLucideIcon("external-link", [
 	["path", {
 		d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6",
 		key: "a6xqqp"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Feather = createLucideIcon("feather", [
+	["path", {
+		d: "M12.67 19a2 2 0 0 0 1.416-.588l6.154-6.172a6 6 0 0 0-8.49-8.49L5.586 9.914A2 2 0 0 0 5 11.328V18a1 1 0 0 0 1 1z",
+		key: "18jl4k"
+	}],
+	["path", {
+		d: "M16 8 2 22",
+		key: "vp34q"
+	}],
+	["path", {
+		d: "M17.5 15H9",
+		key: "1oz8nu"
 	}]
 ]);
 /**
@@ -208,16 +218,6 @@ var LayoutGrid = createLucideIcon("layout-grid", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-var Play = createLucideIcon("play", [["polygon", {
-	points: "6 3 20 12 6 21 6 3",
-	key: "1oa8hb"
-}]]);
-/**
-* @license lucide-react v0.510.0 - ISC
-*
-* This source code is licensed under the ISC license.
-* See the LICENSE file in the root directory of this source tree.
-*/
 var Printer = createLucideIcon("printer", [
 	["path", {
 		d: "M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2",
@@ -257,4 +257,4 @@ var TriangleAlert = createLucideIcon("triangle-alert", [
 	}]
 ]);
 //#endregion
-export { ExternalLink as a, ChevronLeft as c, ArrowLeft as d, LayoutGrid as i, Check as l, Printer as n, ChevronUp as o, Play as r, ChevronRight as s, TriangleAlert as t, BookOpen as u };
+export { ExternalLink as a, Check as c, Feather as i, BookOpen as l, Printer as n, ChevronRight as o, LayoutGrid as r, ChevronLeft as s, TriangleAlert as t, ArrowLeft as u };

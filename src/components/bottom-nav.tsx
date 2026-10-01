@@ -1,11 +1,11 @@
-import { BookOpen, LayoutGrid, Play } from "lucide-react";
+import { BookOpen, Feather, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAppStore, type Tab } from "@/lib/store";
 
 const ITEMS: { id: Tab; label: string; icon: typeof BookOpen }[] = [
   { id: "cards", label: "Cards", icon: BookOpen },
   { id: "days", label: "Days", icon: LayoutGrid },
-  { id: "watch", label: "Watch", icon: Play },
+  { id: "book", label: "Visual Gospel", icon: Feather },
 ];
 
 export function BottomNav() {
@@ -27,15 +27,12 @@ export function BottomNav() {
               type="button"
               onClick={() => setTab(item.id)}
               className={cn(
-                "flex min-h-14 flex-col items-center justify-center gap-1 text-xs font-medium transition-colors duration-150",
+                "flex min-h-14 flex-col items-center justify-center gap-1 px-1 text-[11px] font-medium leading-tight transition-colors duration-150",
                 active ? "text-fg" : "text-fg-muted hover:text-fg",
               )}
             >
-              <Icon
-                className={cn("size-5", item.id === "watch" && "ml-0.5")}
-                strokeWidth={active ? 2.2 : 1.8}
-              />
-              {item.label}
+              <Icon className="size-5" strokeWidth={active ? 2.2 : 1.8} />
+              <span className="text-center">{item.label}</span>
             </button>
           );
         })}
