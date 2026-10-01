@@ -143,7 +143,7 @@ export function FlashDeck() {
           key={`${card.id}-${layer}`}
           ref={scroller}
           className={cn(
-            "min-h-0 flex-1 overflow-y-auto",
+            "relative min-h-0 flex-1 overflow-y-auto",
             direction.current === 1 ? "slide-next" : "slide-prev",
           )}
         >
@@ -218,12 +218,12 @@ function CardFace({
 }) {
   if (layerId === "image") {
     return (
-      <div className="relative flex h-full min-h-[52dvh] items-center justify-center bg-white">
+      <div className="absolute inset-0 flex items-center justify-center bg-white">
         <img
           src={card.image}
           alt={card.imageAlt}
           draggable={false}
-          className="card-art h-full max-h-[70dvh] w-full object-contain"
+          className="card-art max-h-full max-w-full object-contain object-center"
         />
         {showHint ? (
           <p className="pointer-events-none absolute inset-x-0 bottom-3 text-center">

@@ -5,7 +5,7 @@ import { a as ExternalLink, c as Check, i as Feather, l as BookOpen, n as Printe
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as create } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BlbDwlkf.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-d8kihwIa.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -330,7 +330,7 @@ function FlashDeck() {
 				onClick: onCardClick,
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					ref: scroller,
-					className: cn("min-h-0 flex-1 overflow-y-auto", direction.current === 1 ? "slide-next" : "slide-prev"),
+					className: cn("relative min-h-0 flex-1 overflow-y-auto", direction.current === 1 ? "slide-next" : "slide-prev"),
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardFace, {
 						card,
 						layerId: current.id,
@@ -386,12 +386,12 @@ function FlashDeck() {
 }
 function CardFace({ card, layerId, showHint }) {
 	if (layerId === "image") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "relative flex h-full min-h-[52dvh] items-center justify-center bg-white",
+		className: "absolute inset-0 flex items-center justify-center bg-white",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 			src: card.image,
 			alt: card.imageAlt,
 			draggable: false,
-			className: "card-art h-full max-h-[70dvh] w-full object-contain"
+			className: "card-art max-h-full max-w-full object-contain object-center"
 		}), showHint ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 			className: "pointer-events-none absolute inset-x-0 bottom-3 text-center",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
