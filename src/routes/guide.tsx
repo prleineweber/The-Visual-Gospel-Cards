@@ -1,8 +1,34 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Printer } from "lucide-react";
 import { BOOK, CARDS, TRANSLATION } from "@/lib/gospel";
+import { getSiteOrigin } from "@/lib/seo.functions";
+import { GUIDE_DESCRIPTION, GUIDE_TITLE, guideJsonLd, jsonLd } from "@/lib/seo";
 
-export const Route = createFileRoute("/guide")({ component: Guide });
+export const Route = createFileRoute("/guide")({
+  loader: () => getSiteOrigin(),
+  head: ({ loaderData }) => {
+    const origin = loaderData || "";
+    return {
+      meta: [
+        { title: GUIDE_TITLE },
+        { name: "description", content: GUIDE_DESCRIPTION },
+        { property: "og:title", content: GUIDE_TITLE },
+        { property: "og:description", content: GUIDE_DESCRIPTION },
+        { name: "twitter:title", content: GUIDE_TITLE },
+        { name: "twitter:description", content: GUIDE_DESCRIPTION },
+        ...(origin ? [{ property: "og:url", content: `${origin}/guide` }] : []),
+      ],
+      links: origin ? [{ rel: "canonical", href: `${origin}/guide` }] : [],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: jsonLd(guideJsonLd(origin)),
+        },
+      ],
+    };
+  },
+  component: Guide,
+});
 
 function Guide() {
   return (
@@ -36,12 +62,24 @@ function Guide() {
           then walk through the definition, reflection questions, gospel
           response, and prayer. Scripture quotations are from the ESV® Bible.
         </p>
+        <nav aria-label="Days" className="mt-6 flex flex-wrap gap-2 print:hidden">
+          {CARDS.map((card) => (
+            <a
+              key={card.id}
+              href={`#day-${card.day}`}
+              className="rounded-full border border-border px-3 py-1 text-sm text-fg-muted hover:text-fg"
+            >
+              {card.day}. {card.word}
+            </a>
+          ))}
+        </nav>
 
         <div className="mt-8 space-y-10">
           {CARDS.map((card) => (
             <section
               key={card.id}
-              className="break-inside-avoid border-t border-border pt-6 print:border-stone-200"
+              id={`day-${card.day}`}
+              className="break-inside-avoid scroll-mt-6 border-t border-border pt-6 print:border-stone-200"
             >
               <p className="text-xs font-medium tracking-wide text-fg-muted uppercase print:text-stone-500">
                 Day {card.day}

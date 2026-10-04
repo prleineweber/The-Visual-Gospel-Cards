@@ -1,11 +1,11 @@
 import { i as __toESM } from "../_runtime.mjs";
-import { n as CARDS, r as LAYERS, t as BOOK } from "./gospel-Be_Ddc2Q.mjs";
-import { R as require_react, _ as Link, y as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
+import { J as require_react, x as require_jsx_runtime, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as ExternalLink, c as Check, i as Feather, l as BookOpen, n as Printer, o as ChevronRight, r as LayoutGrid, s as ChevronLeft } from "../_libs/lucide-react.mjs";
+import { i as LAYERS, n as BOOK, r as CARDS } from "./router-D-pdBK2n.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as create } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-d8kihwIa.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-BYLlZ2iv.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -149,18 +149,38 @@ function EnterGate({ children }) {
 		sessionStorage.setItem(KEY, "1");
 		setGate("app");
 	}
-	if (gate === "splash") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-		type: "button",
-		onClick: enter,
+	if (gate === "splash") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "flex min-h-dvh w-full flex-col items-center justify-center bg-bg px-6 py-10 text-center",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-			src: "/cover.jpg",
-			alt: `${BOOK.title} by ${BOOK.author}`,
-			className: "w-full max-w-sm rounded-sm shadow-[var(--shadow-border)]"
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-			className: "mt-6 text-sm font-medium tracking-[0.22em] text-fg-muted uppercase",
-			children: "Click or tap to enter"
-		})]
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				type: "button",
+				onClick: enter,
+				className: "w-full max-w-sm",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+					src: "/cover.jpg",
+					alt: `${BOOK.title} by ${BOOK.author}`,
+					className: "w-full rounded-sm shadow-[var(--shadow-border)]"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-6 text-sm font-medium tracking-[0.22em] text-fg-muted uppercase",
+					children: "Click or tap to enter"
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-5 max-w-sm text-sm leading-relaxed text-fg-muted",
+				children: [
+					"A free 30-day companion to ",
+					BOOK.title,
+					" by ",
+					BOOK.author,
+					"."
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+				to: "/guide",
+				className: "mt-2 text-sm font-medium text-fg underline decoration-border underline-offset-4 hover:decoration-fg",
+				children: "Read all 30 days"
+			})
+		]
 	});
 	return children;
 }

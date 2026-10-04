@@ -1,7 +1,7 @@
-import { n as CARDS, t as BOOK } from "./gospel-Be_Ddc2Q.mjs";
-import { _ as Link, y as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
+import { x as require_jsx_runtime, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as Printer, u as ArrowLeft } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/guide-Bvnh2_6A.js
+import { n as BOOK, r as CARDS } from "./router-D-pdBK2n.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/guide-nC-d7BuI.js
 var import_jsx_runtime = require_jsx_runtime();
 function Guide() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -41,10 +41,24 @@ function Guide() {
 						"), then walk through the definition, reflection questions, gospel response, and prayer. Scripture quotations are from the ESV® Bible."
 					]
 				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
+					"aria-label": "Days",
+					className: "mt-6 flex flex-wrap gap-2 print:hidden",
+					children: CARDS.map((card) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+						href: `#day-${card.day}`,
+						className: "rounded-full border border-border px-3 py-1 text-sm text-fg-muted hover:text-fg",
+						children: [
+							card.day,
+							". ",
+							card.word
+						]
+					}, card.id))
+				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "mt-8 space-y-10",
 					children: CARDS.map((card) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-						className: "break-inside-avoid border-t border-border pt-6 print:border-stone-200",
+						id: `day-${card.day}`,
+						className: "break-inside-avoid scroll-mt-6 border-t border-border pt-6 print:border-stone-200",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 								className: "text-xs font-medium tracking-wide text-fg-muted uppercase print:text-stone-500",
