@@ -3,7 +3,7 @@ import { J as require_react, _ as createFileRoute, b as useRouter, d as Scripts,
 import { n as TSS_SERVER_FUNCTION, r as getServerFnById, t as createServerFn } from "./ssr.mjs";
 import { t as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-D-pdBK2n.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-GeS2FZSk.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;
@@ -938,8 +938,19 @@ var Route$4 = createRootRoute({
 			links: [
 				{
 					rel: "icon",
-					type: "image/svg+xml",
-					href: "/favicon.svg"
+					type: "image/png",
+					sizes: "32x32",
+					href: "/favicon-32.png"
+				},
+				{
+					rel: "icon",
+					type: "image/png",
+					sizes: "192x192",
+					href: "/favicon-192.png"
+				},
+				{
+					rel: "shortcut icon",
+					href: "/favicon.ico"
 				},
 				{
 					rel: "stylesheet",
@@ -983,7 +994,7 @@ var Route$4 = createRootRoute({
 		})]
 	})
 });
-var $$splitComponentImporter$1 = () => import("./routes-BYLlZ2iv.mjs");
+var $$splitComponentImporter$1 = () => import("./routes-CUK6LcOQ.mjs");
 var Route$3 = createFileRoute("/")({
 	loader: () => getSiteOrigin(),
 	head: ({ loaderData }) => {
@@ -1005,7 +1016,7 @@ var Route$3 = createFileRoute("/")({
 	},
 	component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-var $$splitComponentImporter = () => import("./guide-nC-d7BuI.mjs");
+var $$splitComponentImporter = () => import("./guide-CDOTIWF0.mjs");
 var Route$2 = createFileRoute("/guide")({
 	loader: () => getSiteOrigin(),
 	head: ({ loaderData }) => {
